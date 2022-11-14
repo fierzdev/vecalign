@@ -18,8 +18,10 @@ limitations under the License.
 
 
 import argparse
+import pathlib
 
 from dp_utils import yield_overlaps
+import os
 
 
 def go(output_file, input_files, num_overlaps):
@@ -42,7 +44,7 @@ def _main():
     parser = argparse.ArgumentParser('Create text file containing overlapping sentences.',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('-i', '--inputs', type=str, nargs='+',
+    parser.add_argument('-i', '--inputs', type=str,
                         help='input text file(s).')
 
     parser.add_argument('-o', '--output', type=str,
@@ -54,7 +56,7 @@ def _main():
     args = parser.parse_args()
     go(output_file=args.output,
        num_overlaps=args.num_overlaps,
-       input_files=args.inputs)
+       input_files=[os.path.join(args.inputs, x) for x in os.listdir(args.inputs) if "_filtered" in x and pathlib.Path(os.path.join(args.inputs, x)).is_file()])
 
 
 if __name__ == '__main__':
