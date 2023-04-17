@@ -36,16 +36,17 @@ def align_mappings_to_moses(tgt_embed, src_embed, src_folder, tgt_folder, mappin
     with open(mapping_file) as f:
         mappings = [line for line in csv.reader(f)]
     for src_file, tgt_file in mappings:
-        output = vecalign.vecalign.align(f'{src_folder}/{src_file}', f'{tgt_folder}/{tgt_file}', (f'{src_embed}', f'{src_embed}.vec.npy'), (f'{tgt_embed}', f'{tgt_embed}.vec.npy'))
+        output = vecalign.vecalign.align([f'{src_folder}/{src_file}'], [f'{tgt_folder}/{tgt_file}'], (f'{src_embed}', f'{src_embed}.vec.npy'), (f'{tgt_embed}', f'{tgt_embed}.vec.npy'))
         #cmd = f"python3 vecalign.py -s {src_folder}/{src_file} -t {tgt_folder}/{tgt_file} --tgt_embed {tgt_embed} {tgt_embed}.vec.npy --src_embed {src_embed} {src_embed}.vec.npy"
         #alignments = subprocess.check_output(cmd.split(" ")).decode().splitlines()
-        alignments = output.read()
+        output.seek(0)
+        alignments = output.read().splitlines()
         content = read_file(src_folder, src_file).splitlines()
         content2 = read_file(tgt_folder, tgt_file).splitlines()
         unmatched = 0
         for alignment in alignments:
             alignment = alignment.split(":")[:-1]
-            if not alignment[0] or not alignment[1]:  # If segment could not be aligned
+            if alignment[0] == "[]" or alignment[1] == "[]":  # If segment could not be aligned
                 unmatched += 1
             else:  # only write out aligned segments --> we do not want hallucinations
                 for file_ix, (i, cont) in enumerate(zip(alignment, (content, content2))):
@@ -61,7 +62,6 @@ def align_mappings_to_moses(tgt_embed, src_embed, src_folder, tgt_folder, mappin
         if not unmatched / len(alignments) > 0.3:
             out_files[0].write("@@ENDOFDOC@@\n")
             out_files[1].write("@@ENDOFDOC@@\n")
-    sys.stdout = stdout_saved
     for file in out_files:
         try:
             file.close()

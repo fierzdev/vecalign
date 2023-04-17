@@ -21,7 +21,7 @@ import logging
 import pickle
 from math import ceil
 from random import seed as seed
-from typing import TextIO
+from io import StringIO
 
 import numpy as np
 
@@ -141,7 +141,7 @@ def align(src, tgt, src_embed, tgt_embed, gold_alignment=None, alignment_max_siz
 
         test_alignments.append(stack[0]['final_alignments'])
         stack_list.append(stack)
-        return output_file
+        return output_file.read()
 
     if gold_alignment is not None:
         gold_list = [read_alignments(x) for x in gold_alignment]
