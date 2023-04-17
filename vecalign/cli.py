@@ -24,7 +24,7 @@ def align(embeddings_src: str, embeddings_trg: str, files_src: str, files_trg: s
 
 
 @app.command()
-def create_overlap_files(infolder: str, outfile: str, num_overlaps=4):
+def create_overlap_files(infolder: str, outfile: str, num_overlaps: int =4):
     """
     args:
     infolder: str --> Folder with files to create overlaps for
