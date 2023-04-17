@@ -2,9 +2,11 @@ import argparse
 import subprocess
 import csv
 
+
 def read_file(folder, file):
-    with open(folder+'/'+file) as f:
+    with open(folder + '/' + file) as f:
         return f.read()
+
 
 def align_mappings(tgt_embed, src_embed, src_folder, tgt_folder, mapping_file):
     with open(mapping_file) as f:
@@ -39,7 +41,7 @@ def align_mappings_to_moses(tgt_embed, src_embed, src_folder, tgt_folder, mappin
             alignment = alignment.split(":")[:-1]
             if not alignment[0] or not alignment[1]:  # If segment could not be aligned
                 unmatched += 1
-            else: # only write out aligned segments --> we do not want hallucinations
+            else:  # only write out aligned segments --> we do not want hallucinations
                 for file_ix, (i, cont) in enumerate(zip(alignment, (content, content2))):
                     indices = eval(i)
                     space = False
@@ -48,7 +50,7 @@ def align_mappings_to_moses(tgt_embed, src_embed, src_folder, tgt_folder, mappin
                             out_files[file_ix].write(" ")  # space between two segments on same line
                         out_files[file_ix].write(cont[ix])
                         space = True
-                    out_files[file_ix].write("\n")  #  newline after segement is done
+                    out_files[file_ix].write("\n")  # newline after segement is done
         # Only accept files with less than 30% unmatched lines
         if not unmatched / len(alignments) > 0.3:
             out_files[0].write("@@ENDOFDOC@@\n")
@@ -59,7 +61,8 @@ def align_mappings_to_moses(tgt_embed, src_embed, src_folder, tgt_folder, mappin
         except Exception:
             print("Problems closing file")
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("tgt_embed")
     parser.add_argument("src_embed")

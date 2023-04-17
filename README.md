@@ -100,7 +100,7 @@ Which should give you results that approximately match the Vecalign paper:
 ```
 
 Note: Run `./vecalign.py -h` for full sentence alignment usage and options. 
-For stand-alone scoring against a gold reference, see [score.py](score.py)
+For stand-alone scoring against a gold reference, see [score.py](vecalign/score.py)
 
 ### Embed your own documents
 
@@ -144,7 +144,7 @@ Note that LASER will not overwrite an embedding file if it exsts, so you may nee
 
 [We propose](https://aclanthology.org/2020.emnlp-main.483) using Vecalign to rescore document alignment candidates, 
 in conjunction with candidate generation using a document embedding method that retains sentence order information.
-Example code for our document embedding method is provided [here](standalone_document_embedding_demo.py).
+Example code for our document embedding method is provided [here](vecalign/standalone_document_embedding_demo.py).
 
 ### Publications
 

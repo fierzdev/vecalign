@@ -20,7 +20,7 @@ limitations under the License.
 import argparse
 import pathlib
 
-from dp_utils import yield_overlaps
+from vecalign.dp_utils import yield_overlaps
 import os
 
 
