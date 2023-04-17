@@ -1,3 +1,6 @@
+import os
+import pathlib
+
 from typer import Typer
 
 from vecalign.align import align_mappings_to_moses
@@ -28,4 +31,4 @@ def create_overlap_files(infolder: str, outfile: str, num_overlaps=4):
     outfile: str --> Write overlaps to this file
     num_overlaps: int --> Maximum number of allowed overlaps.
     """
-    vecalign.overlap.go(outfile, infolder, num_overlaps=num_overlaps)
+    vecalign.overlap.go(outfile, [os.path.join(infolder, x) for x in os.listdir(infolder) if "_filtered" in x and pathlib.Path(os.path.join(infolder, x)).is_file()], num_overlaps=num_overlaps)
