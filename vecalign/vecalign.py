@@ -21,6 +21,7 @@ import logging
 import pickle
 from math import ceil
 from random import seed as seed
+from typing import TextIO
 
 import numpy as np
 
@@ -113,6 +114,7 @@ def align(src, tgt, src_embed, tgt_embed, gold_alignment=None, alignment_max_siz
 
     test_alignments = []
     stack_list = []
+    output_file = TextIO()
     for src_file, tgt_file in zip(src, tgt):
         logger.info('Aligning src="%s" to tgt="%s"', src_file, tgt_file)
 
@@ -135,10 +137,11 @@ def align(src, tgt, src_embed, tgt_embed, gold_alignment=None, alignment_max_siz
                          num_samps_for_norm=num_samps_for_norm)
 
         # write final alignments to stdout
-        print_alignments(stack[0]['final_alignments'], stack[0]['alignment_scores'])
+        print_alignments(stack[0]['final_alignments'], stack[0]['alignment_scores'], file=output_file)
 
         test_alignments.append(stack[0]['final_alignments'])
         stack_list.append(stack)
+        return output_file
 
     if gold_alignment is not None:
         gold_list = [read_alignments(x) for x in gold_alignment]

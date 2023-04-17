@@ -35,13 +35,11 @@ def align_mappings_to_moses(tgt_embed, src_embed, src_folder, tgt_folder, mappin
     out_files = [open(out_src, 'w+'), open(out_tgt, 'w+')]
     with open(mapping_file) as f:
         mappings = [line for line in csv.reader(f)]
-    stdout_saved = sys.stdout
     for src_file, tgt_file in mappings:
-        sys.stdout = StringIO()
-        vecalign.vecalign.align(f'{src_folder}/{src_file}', f'{tgt_folder}/{tgt_file}', (f'{src_embed}', f'{src_embed}.vec.npy'), (f'{tgt_embed}', f'{tgt_embed}.vec.npy'))
+        output = vecalign.vecalign.align(f'{src_folder}/{src_file}', f'{tgt_folder}/{tgt_file}', (f'{src_embed}', f'{src_embed}.vec.npy'), (f'{tgt_embed}', f'{tgt_embed}.vec.npy'))
         #cmd = f"python3 vecalign.py -s {src_folder}/{src_file} -t {tgt_folder}/{tgt_file} --tgt_embed {tgt_embed} {tgt_embed}.vec.npy --src_embed {src_embed} {src_embed}.vec.npy"
         #alignments = subprocess.check_output(cmd.split(" ")).decode().splitlines()
-        alignments = sys.stdout.read()
+        alignments = output.read()
         content = read_file(src_folder, src_file).splitlines()
         content2 = read_file(tgt_folder, tgt_file).splitlines()
         unmatched = 0
