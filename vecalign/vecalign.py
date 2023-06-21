@@ -19,9 +19,9 @@ limitations under the License.
 import argparse
 import logging
 import pickle
+from io import StringIO
 from math import ceil
 from random import seed as seed
-from io import StringIO
 
 import numpy as np
 
@@ -114,7 +114,7 @@ def align(src, tgt, src_embed, tgt_embed, gold_alignment=None, alignment_max_siz
 
     test_alignments = []
     stack_list = []
-    output_file = TextIO()
+    output_file = StringIO()
     for src_file, tgt_file in zip(src, tgt):
         logger.info('Aligning src="%s" to tgt="%s"', src_file, tgt_file)
 
@@ -141,7 +141,7 @@ def align(src, tgt, src_embed, tgt_embed, gold_alignment=None, alignment_max_siz
 
         test_alignments.append(stack[0]['final_alignments'])
         stack_list.append(stack)
-        return output_file.read()
+        return output_file
 
     if gold_alignment is not None:
         gold_list = [read_alignments(x) for x in gold_alignment]
