@@ -32,8 +32,8 @@ def align_mappings(tgt_embed, src_embed, src_folder, tgt_folder, mapping_file):
 
 
 def align_mappings_to_moses(tgt_embed, src_embed, src_folder, tgt_folder, mapping_file, out_src, out_tgt):
-    out_files = [open(out_src, 'w+'), open(out_tgt, 'w+')]
-    with open(mapping_file) as f:
+    out_files = [open(out_src, 'w+', encoding='utf-8'), open(out_tgt, 'w+', encoding='utf-8')]
+    with open(mapping_file, encoding='utf-8') as f:
         mappings = [line for line in csv.reader(f)]
     for src_file, tgt_file in mappings:
         output = vecalign.vecalign.align([f'{src_folder}/{src_file}'], [f'{tgt_folder}/{tgt_file}'], (f'{src_embed}', f'{src_embed}.vec.npy'), (f'{tgt_embed}', f'{tgt_embed}.vec.npy'))
